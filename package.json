@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/AnnaKuszal/Chat-app/issues"
   },
-  "homepage": "https://github.com/AnnaKuszal/Chat-app#readme"
+  "homepage": "https://github.com/AnnaKuszal/Chat-app#readme",
+  "dependencies": {
+    "express": "4.17.1"
+  }
 }
