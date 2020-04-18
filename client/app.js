@@ -1,4 +1,7 @@
-'use strict'
+'use strict';
+
+const socket = io();
+socket.on('message', ({ author, content }) => addMessage(author, content))
 
 const loginForm = document.getElementById('welcome-form');
 const messagesSection = document.getElementById('messages-section');
@@ -8,6 +11,7 @@ const userNameInput = document.getElementById('username');
 const messageContentInput = document.getElementById('message-content');
 
 let userName = '';
+
 
 function login(event) {
   event.preventDefault();
@@ -41,14 +45,17 @@ function addMessage (author, content) {
   messagesList.appendChild(message);
 }
 
-function sendMessage(event) {
-  event.preventDefault();
+function sendMessage(e) {
+  e.preventDefault();
   
   if (!messageContentInput.value) {
     alert('User message field is empty');
   } else {
     addMessage(userName, messageContentInput.value);
   }
+
+  socket.emit('message', { author: userName, content: messageContentInput.value });
+
   messageContentInput.value = '';
 };
 
