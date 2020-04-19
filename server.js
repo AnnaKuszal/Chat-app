@@ -5,7 +5,6 @@ const socket = require('socket.io');
 const app = express();
 
 
-
 const messages = [];
 const users = [];
 
@@ -18,6 +17,7 @@ app.get('*', (req, res) => {
 const server = app.listen(8000, () => {
   console.log('Server is running on port: 8000');
 });
+
 const io = socket(server);
 
 io.on('connection', (socket) => {
@@ -27,18 +27,30 @@ io.on('connection', (socket) => {
     messages.push(message);
     socket.broadcast.emit('message', message);
   });
-  socket.on('join', (login) => {
-    users.push({ name: login, id: socket.id });
 
-    console.log('USERS:', users);
-  
+  socket.on('join', (user) => {
+    users.push({ name: user, id: socket.id });
+
+    socket.broadcast.emit('newUser', user);
   });
+
   socket.on('disconnect', () => { 
     console.log('Oh, socket ' + socket.id + ' has left');
+    
+    let userName = '';
+    users.filter(item => {
+      if(item.id === socket.id) {
+        userName = item.name;
+      }
+
+    });
+    
     const user = users.filter(item => item.id === socket.id);
     const index = users.indexOf(user);
     users.splice(index, 1);
-    console.log('USERS:', users);
+
+    socket.broadcast.emit('removeUser', userName);
   });
+
   console.log('I\'ve added a listener on message event \n');
 });

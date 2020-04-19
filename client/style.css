@@ -103,6 +103,9 @@ p {
 .message--self .message__content {
   background: #3498db;
 }
+.message--chatBot {
+  font-style: italic;
+}
 
 .show {
   display: block;

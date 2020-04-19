@@ -1,7 +1,10 @@
 'use strict';
 
 const socket = io();
-socket.on('message', ({ author, content }) => addMessage(author, content))
+socket.on('message', ({ author, content }) => addMessage(author, content));
+socket.on('newUser', (user) => addMessage('Chat Bot', user + ' has joined the conversation!'));
+socket.on('removeUser', (userName) => addMessage('Chat Bot', userName + ' has left the conversation!'));
+
 
 const loginForm = document.getElementById('welcome-form');
 const messagesSection = document.getElementById('messages-section');
@@ -35,6 +38,10 @@ function addMessage (author, content) {
 
   if(author === userName) {
     message.classList.add('message--self');
+  }
+
+  if(author === 'Chat Bot') {
+    message.classList.add('message--chatBot');
   }
 
   message.innerHTML = `
